@@ -1,0 +1,85 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: grafana
+  name: grafana
+  namespace: observability
+spec:
+  ports:
+    - name: grafana
+      port: 3000
+      protocol: TCP
+      targetPort: 3000
+  selector:
+    app: grafana
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+  namespace: observability
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+      name: grafana
+    spec:
+      initContainers:
+        - name: create-db-if-needed
+          image: ubuntu/postgres:edge
+          command: ["/bin/bash"]
+          args : ["-c", 'psql -U postgres --host postgres-service -c "CREATE DATABASE grafana" |& tee /dev/stderr | grep "CREATE DATABASE\|already exists" ']
+          env:
+          - name: PGPASSWORD
+            value: "mysecret" # TODO: handle secret properly.
+      containers:
+        - name: grafana
+          image: grafana/grafana:9.3.4
+          env:
+            #- name: GF_SERVER_ROOT_URL
+            # value: https://foo/
+            #- name: GF_PATHS_DATA
+            #  value: /data
+            #- name: GF_PATHS_PLUGINS
+            #  value: /data/plugins
+            #- name: GF_PATHS_PROVISIONING
+            #  value: /provisioning
+            - name: GF_SECURITY_ALLOW_EMBEDDING
+              value: "true"
+            - name: GF_AUTH_ANONYMOUS_ENABLED
+              value: "true"
+            - name: GF_ANALYTICS_REPORTING_ENABLED
+              value: "false"
+            - name: GF_LOG_MODE
+              value: console
+            - name: GF_INSTALL_PLUGINS
+              value: grafana-piechart-panel,grafana-clock-panel
+            - name: GF_SERVER_ENABLE_GZIP
+              value: "true"
+            - name: GF_METRICS_ENABLED
+              value: "true"
+            - name: GF_EXPLORE_ENABLED
+              value: "true"
+            - name: GF_DATABASE_TYPE
+              value: postgres
+            - name: GF_DATABASE_HOST
+              value: postgres-service:5432
+            - name: GF_DATABASE_NAME
+              value: grafana
+            - name: GF_DATABASE_USER
+              value: postgres
+            - name: GF_DATABASE_PASSWORD
+              value: mysecret # TODO: handle secret properly.
+            - name: GF_DATABASE_SSL_MODE
+              value: disable
+          ports:
+            - containerPort: 3000
+              name: web
+              protocol: TCP
+              
