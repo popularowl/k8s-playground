@@ -27,7 +27,7 @@ spec:
           #       name: backstage-secrets
           env:
           - name: POSTGRES_PASSWORD
-            value: "strongpassword" # TODO: move this to Vault
+            value: "hunter2" # TODO: move this to Vault
           - name: POSTGRES_USER
             value: "backstage"
 ---
