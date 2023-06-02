@@ -20,11 +20,16 @@ spec:
           ports:
             - name: http
               containerPort: 7007
-          envFrom:
-            - secretRef:
-                name: postgres-secrets
-            - secretRef:
-                name: backstage-secrets
+          # envFrom:
+          #   - secretRef:
+          #       name: postgres-secrets
+          #   - secretRef:
+          #       name: backstage-secrets
+          env:
+          - name: POSTGRES_PASSWORD
+            value: "strongpassword" # TODO: move this to Vault
+          - name: POSTGRES_USER
+            value: "backstage"
 ---
 apiVersion: v1
 kind: Service
@@ -38,13 +43,4 @@ spec:
     - name: http
       port: 80
       targetPort: http
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: backstage-secrets
-  namespace: backstage
-type: Opaque
-data:
-  ## test value in base64 - no real token here, need this from Vault
-  GITHUB_TOKEN: YmxhYmxhYmxh
+
