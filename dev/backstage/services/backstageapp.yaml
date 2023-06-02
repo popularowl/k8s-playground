@@ -48,24 +48,3 @@ type: Opaque
 data:
   ## test value in base64 - no real token here, need this from Vault
   GITHUB_TOKEN: YmxhYmxhYmxh
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: backstage-ingress
-  namespace: backstage
-  annotations:
-    external-dns.alpha.kubernetes.io/target: traefik-private-web.devel.ceradev.co.uk
-spec:
-  ingressClassName: traefik-private
-  rules:
-  - host: backstage-k8s.devel.ceradev.co.uk
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: backstage
-            port:
-              number: 80
