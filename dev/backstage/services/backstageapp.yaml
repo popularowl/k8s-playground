@@ -15,21 +15,16 @@ spec:
     spec:
       containers:
         - name: backstage
-          image: popularowl/backstage-slim:0.4
+          image: popularowl/backstage-slim:0.5
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
               containerPort: 7007
-          # envFrom:
-          #   - secretRef:
-          #       name: postgres-secrets
-          #   - secretRef:
-          #       name: backstage-secrets
-          env:
-          - name: POSTGRES_PASSWORD
-            value: "hunter2" # TODO: move this to Vault
-          - name: POSTGRES_USER
-            value: "backstage"
+          envFrom:
+            - secretRef:
+                name: postgres-secrets
+            - secretRef:
+                name: backstage-secrets
 ---
 apiVersion: v1
 kind: Service
