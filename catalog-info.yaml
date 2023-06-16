@@ -116,7 +116,6 @@ apiVersion: backstage.io/v1alpha1
 kind: Resource
 metadata:
   name: mimir-s3
-  namespace: S3 bucket for metrics storage
 spec:
   type: s3-bucket
   owner: platform-team
@@ -160,7 +159,6 @@ apiVersion: backstage.io/v1alpha1
 kind: Resource
 metadata:
   name: loki-s3
-  namespace: S3 bucket for log storage
 spec:
   type: s3-bucket
   owner: platform-team
