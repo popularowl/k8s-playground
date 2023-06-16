@@ -1,0 +1,184 @@
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: observability-monitoring
+  description: Observability and monitoring services
+spec:
+  owner: platform-team
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: open-telemetry-system
+  description: OpenTelemetry and services for data browsing
+spec:
+  owner: platform-team
+  domain: observability-monitoring
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: opentelemetry-collector
+  description: Open Telemetry collector
+  links:
+    - url: https://dev.internal
+      title: DEV instance
+    - url: https://dev.internal
+      title: QA instance
+    - url: https://dev.internal
+      title: UAT instance
+    - url: https://dev.internal
+      title: Production instance
+spec:
+  type: service
+  lifecycle: production
+  owner: platform-team
+  system: open-telemetry-system
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: grafana
+  description: Grafana
+  links:
+    - url: https://dev.internal
+      title: DEV instance
+    - url: https://dev.internal
+      title: QA instance
+    - url: https://dev.internal
+      title: UAT instance
+    - url: https://dev.internal
+      title: Production instance
+spec:
+  type: website
+  lifecycle: production
+  owner: platform-team
+  system: open-telemetry-system
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: grafana-database
+  description: PostgreSQL database for Grafana
+spec:
+  type: database
+  owner: platform-team
+  system: open-telemetry-system
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: prometheus
+  description: Prometheus
+  links:
+    - url: https://dev.internal
+      title: DEV instance
+    - url: https://dev.internal
+      title: QA instance
+    - url: https://dev.internal
+      title: UAT instance
+    - url: https://dev.internal
+      title: Production instance
+spec:
+  type: website
+  lifecycle: production
+  owner: platform-team
+  system: open-telemetry-system
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: mimir
+  description: Mimir - prometheus compatible metrics storage
+  links:
+    - url: https://dev.internal
+      title: DEV instance
+    - url: https://dev.internal
+      title: QA instance
+    - url: https://dev.internal
+      title: UAT instance
+    - url: https://dev.internal
+      title: Production instance
+spec:
+  type: website
+  lifecycle: experimental
+  owner: platform-team
+  system: open-telemetry-system
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: mimir-s3
+  namespace: S3 bucket for metrics storage
+spec:
+  type: s3-bucket
+  owner: platform-team
+  system: open-telemetry-system
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: zipkin
+  description: Zipkin
+  links:
+    - url: https://dev.internal
+      title: DEV instance
+    - url: https://dev.internal
+      title: QA instance
+    - url: https://dev.internal
+      title: UAT instance
+    - url: https://dev.internal
+      title: Production instance
+spec:
+  type: website
+  lifecycle: production
+  owner: platform-team
+  system: open-telemetry-system
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: loki
+  description: Loki instance for log aggregation
+spec:
+  type: website
+  lifecycle: production
+  owner: platform-team
+  system: open-telemetry-system
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: loki-s3
+  namespace: S3 bucket for log storage
+spec:
+  type: s3-bucket
+  owner: platform-team
+  system: open-telemetry-system
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: Otello
+  description: A simple dotnet service for testing
+  links:
+    - url: https://dev.internal
+    - url: https://dev.internal
+    - url: https://dev.internal
+    - url: https://dev.internal
+spec:
+  type: service
+  owner: platform-team
+  system: open-telemetry-system
+  lifecycle: production
